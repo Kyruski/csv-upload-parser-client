@@ -22,6 +22,7 @@ const UploadInput = () => {
     e.preventDefault();
     if (isFilePicked) {
       console.log(selectedFile);
+      console.log(i)
       const formData = new FormData();
   
       formData.append('File', selectedFile);
@@ -50,7 +51,7 @@ const UploadInput = () => {
       {fileTypeError ? (
         <p style={{color: "red"}}>Only .csv files are accepted</p>
       ) : null}
-      <button disabled={isFilePicked} onClick={handleSubmit} > Upload </button>
+      <button disabled={!isFilePicked} onClick={handleSubmit} > Upload </button>
     </form>
   )
 }
