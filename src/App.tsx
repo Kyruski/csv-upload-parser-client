@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import logo from './logo.svg'
 import './App.css'
+import UploadInput from './components/UploadInput'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -37,6 +38,7 @@ function App() {
             Vite Docs
           </a>
         </p>
+        <UploadInput />
       </header>
     </div>
   )
