@@ -1,5 +1,7 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 
+const serverEndpoint = 'http://127.0.0.1:5000/'
 
 const UploadInput = () => {
   const [selectedFile, setSelectedFile] = useState('');
@@ -7,6 +9,20 @@ const UploadInput = () => {
   const [fileTypeError, setFileTypeError] = useState(false);
   
   const validFileTypes = /.csv\b/;
+
+  const uploadFile = (file) => {
+    const formData = new FormData();
+    formData.append('File', file);
+    const formHeaders = { headers: { 'Content-Type': 'multipart/form-data' }}
+
+    axios.post(serverEndpoint + 'file', formData, formHeaders)
+      .then(res => {
+        console.log('We did it, ', res);
+      })
+      .catch(err => {
+        console.log('we got an error, ', err);
+      })
+  }
 
   const changeHandler = (e) => {
     if (e.target.files[0].name.match(validFileTypes)) {
@@ -20,13 +36,11 @@ const UploadInput = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (isFilePicked) {
-      console.log(selectedFile);
-      console.log(i)
-      const formData = new FormData();
-  
-      formData.append('File', selectedFile);
-    }
+    console.log('abc');
+      uploadFile(selectedFile);
+      setFileTypeError(false);
+      setSelectedFile('');
+      setIsFilePicked(false);
   }
 
   return (
