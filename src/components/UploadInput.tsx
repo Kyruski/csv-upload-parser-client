@@ -8,8 +8,10 @@ const UploadInput = () => {
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [fileTypeError, setFileTypeError] = useState(false);
   const [xAxis, setXAxis] = useState('');
+  const [haveData, setHaveData] = useState(false);
+  const [data, setData] = useState({})
   
-  const validFileTypes = /.csv\b/;
+  const validFileTypes = /.csv$/;
 
   const uploadFile = (file: File) => {
     const formData = new FormData();
@@ -19,7 +21,8 @@ const UploadInput = () => {
 
     axios.post(serverEndpoint + 'file', formData, formHeaders)
       .then(res => {
-        console.log('We did it, ', res);
+        setData(res.data);
+        setHaveData(true);
       })
       .catch(err => {
         console.log('we got an error, ', err);
@@ -64,9 +67,9 @@ const UploadInput = () => {
           <div>
             Please Select X-Axis
             <input type="radio" id="x-axis-rows" name="x-axis" value="rows" onClick={() => setXAxis('rows')} />
-            <label for="x-axis-rows">Rows</label>
+            <label htmlFor="x-axis-rows">Rows</label>
             <input type="radio" id="x-axis-columns" name="x-axis" value="colums" onClick={() => setXAxis('columns')} />
-            <label for="x-axis-columns">Columns</label>
+            <label htmlFor="x-axis-columns">Columns</label>
           </div>
           <br />
         </div>
