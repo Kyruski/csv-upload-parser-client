@@ -7,12 +7,14 @@ const UploadInput = () => {
   const [selectedFile, setSelectedFile] = useState('');
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [fileTypeError, setFileTypeError] = useState(false);
+  const [xAxis, setXAxis] = useState('');
   
   const validFileTypes = /.csv\b/;
 
-  const uploadFile = (file) => {
+  const uploadFile = (file: File) => {
     const formData = new FormData();
     formData.append('File', file);
+    formData.append('xAxis', xAxis);
     const formHeaders = { headers: { 'Content-Type': 'multipart/form-data' }}
 
     axios.post(serverEndpoint + 'file', formData, formHeaders)
@@ -24,7 +26,7 @@ const UploadInput = () => {
       })
   }
 
-  const changeHandler = (e) => {
+  const changeHandler = (e: React.MouseEvent) => {
     if (e.target.files[0].name.match(validFileTypes)) {
       setSelectedFile(e.target.files[0]);
       setIsFilePicked(true);
@@ -36,11 +38,10 @@ const UploadInput = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('abc');
-      uploadFile(selectedFile);
-      setFileTypeError(false);
-      setSelectedFile('');
-      setIsFilePicked(false);
+    uploadFile(selectedFile);
+    setFileTypeError(false);
+    setSelectedFile('');
+    setIsFilePicked(false);
   }
 
   return (
@@ -57,14 +58,24 @@ const UploadInput = () => {
           <p>
             File Size in bytes: {selectedFile.size}
           </p>
-          {/* <p>
+          <p>
             Last modified: {selectedFile.lastModifiedDate.toLocaleDateString()}
-          </p> */}
+          </p>
+          <div>
+            Please Select X-Axis
+            <input type="radio" id="x-axis-rows" name="x-axis" value="rows" onClick={() => setXAxis('rows')} />
+            <label for="x-axis-rows">Rows</label>
+            <input type="radio" id="x-axis-columns" name="x-axis" value="colums" onClick={() => setXAxis('columns')} />
+            <label for="x-axis-columns">Columns</label>
+          </div>
+          <br />
         </div>
       ) : null}
       {fileTypeError ? (
         <p style={{color: "red"}}>Only .csv files are accepted</p>
       ) : null}
+      
+      
       <button disabled={!isFilePicked} onClick={handleSubmit} > Upload </button>
     </form>
   )
